@@ -5,6 +5,7 @@ import lombok.*;
 import org.checkerframework.checker.index.qual.Positive;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.envers.Audited;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -19,6 +20,7 @@ import java.util.Set;
 @ToString
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "student")
+@Audited
 public class Student {
 
     @Id
@@ -30,7 +32,8 @@ public class Student {
     private LocalDate birthDate;
     @Positive
     private int semester;
-
+    private int centralIdentification;
+    private int usedFreeSemesters;
     @ManyToMany
     private Set<Course> coursesToLearn;
 }

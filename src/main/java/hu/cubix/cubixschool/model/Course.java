@@ -2,6 +2,7 @@ package hu.cubix.cubixschool.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.envers.Audited;
 
 import java.util.Set;
 
@@ -13,6 +14,7 @@ import java.util.Set;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @ToString
+@Audited
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

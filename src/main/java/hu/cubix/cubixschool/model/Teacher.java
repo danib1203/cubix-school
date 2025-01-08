@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.envers.Audited;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -18,6 +19,7 @@ import java.util.Set;
 @ToString
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "teacher")
+@Audited
 public class Teacher {
 
     @Id

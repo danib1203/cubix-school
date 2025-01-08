@@ -7,10 +7,12 @@ import hu.cubix.cubixschool.repository.CourseRepository;
 import hu.cubix.cubixschool.repository.StudentRepository;
 import hu.cubix.cubixschool.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Random;
 import java.util.Set;
 
 @RequiredArgsConstructor
@@ -20,13 +22,14 @@ public class InitDbService {
     private final StudentRepository studentRepository;
     private final TeacherRepository teacherRepository;
     private final CourseRepository courseRepository;
+    private final JdbcTemplate jdbcTemplate;
 
     @Transactional
     public void initDb() {
 
-        Student student1 = studentRepository.save(Student.builder().id(0).name("Mark").birthDate(LocalDate.of(2000, 1, 1)).semester(2).build());
-        Student student2 = studentRepository.save(Student.builder().id(0).name("Elza").birthDate(LocalDate.of(2005, 10, 21)).semester(1).build());
-        Student student3 = studentRepository.save(Student.builder().id(0).name("Anna").birthDate(LocalDate.of(2002, 3, 15)).semester(4).build());
+        Student student1 = studentRepository.save(Student.builder().id(0).name("Mark").birthDate(LocalDate.of(2000, 1, 1)).semester(2).centralIdentification(1234).usedFreeSemesters(2).build());
+        Student student2 = studentRepository.save(Student.builder().id(0).name("Elza").birthDate(LocalDate.of(2005, 10, 21)).semester(1).centralIdentification(4321).usedFreeSemesters(1).build());
+        Student student3 = studentRepository.save(Student.builder().id(0).name("Anna").birthDate(LocalDate.of(2002, 3, 15)).semester(4).centralIdentification(5678).usedFreeSemesters(3).build());
         Student student4 = studentRepository.save(Student.builder().id(0).name("Diák").semester(1).build());
 
         Teacher teacher1 = teacherRepository.save(Teacher.builder().id(0).name("Annamária").birthdate(LocalDate.of(1970, 3, 15)).build());
@@ -51,5 +54,21 @@ public class InitDbService {
         studentRepository.deleteAll();
         teacherRepository.deleteAll();
         courseRepository.deleteAll();
+    }
+
+    @Transactional
+    public void deleteAudTables() {
+        jdbcTemplate.update("delete from course_aud");
+        jdbcTemplate.update("delete from student_aud");
+        jdbcTemplate.update("delete from teacher_aud");
+        jdbcTemplate.update("delete from student_courses_to_learn_aud");
+        jdbcTemplate.update("delete from teacher_courses_to_teach_aud");
+    }
+
+    @Transactional
+    public void makeHistory() {
+        courseRepository.findAll().forEach(course -> {
+            course.setName("asd");
+        });
     }
 }

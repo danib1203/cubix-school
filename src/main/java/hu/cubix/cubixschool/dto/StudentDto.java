@@ -9,7 +9,6 @@ import java.util.Set;
 
 @Getter
 @Setter
-
 public class StudentDto {
 
 
@@ -18,4 +17,6 @@ public class StudentDto {
     private LocalDate birthDate;
     private int semester;
     private Set<Course> coursesToLearn;
+    private int centralIdentification;
+    private int usedFreeSemesters;
 }
