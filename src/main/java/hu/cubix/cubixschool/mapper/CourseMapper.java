@@ -1,11 +1,12 @@
 package hu.cubix.cubixschool.mapper;
 
-import hu.cubix.cubixschool.dto.CourseDto;
-import hu.cubix.cubixschool.dto.StudentDto;
-import hu.cubix.cubixschool.dto.TeacherDto;
+
 import hu.cubix.cubixschool.model.Course;
 import hu.cubix.cubixschool.model.Student;
 import hu.cubix.cubixschool.model.Teacher;
+import hu.webuni.cubixschool.api.model.CourseDto;
+import hu.webuni.cubixschool.api.model.StudentDto;
+import hu.webuni.cubixschool.api.model.TeacherDto;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

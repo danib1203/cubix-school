@@ -12,7 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class HistoryData<T>{
     private T data;
-    private RevisionType revisionType;
+    private RevisionType revType;
     private int revision;
     private Date date;
 }

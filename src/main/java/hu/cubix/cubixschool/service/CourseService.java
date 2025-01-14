@@ -8,21 +8,21 @@ import hu.cubix.cubixschool.repository.CourseRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.DefaultRevisionEntity;
 import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 @RequiredArgsConstructor
 @Service
@@ -112,6 +112,23 @@ public class CourseService {
         course.getStudents().size();
         return course;
     }
+
+    @Transactional
+    public OptionalDouble getAverageSemesterByCourse(int courseId) {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        Course course = courseRepository.findById(courseId).orElse(null);
+        if (course == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found");
+        Set<Student> students = course.getStudents();
+
+        return Arrays.stream(students.stream().mapToInt(Student::getSemester).toArray()).average();
+    }
+
 }
 
 

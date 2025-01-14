@@ -1,0 +1,368 @@
+openapi: 3.0.1
+x-stoplight:
+  id: qpgy16q8iqgt4
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: 'http://localhost:8080'
+    description: Generated server url
+paths:
+  /api/course/search:
+    post:
+      tags:
+        - course-controller
+      operationId: search
+      parameters:
+        - name: semesterFrom
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: semesterTo
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: full
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - schema:
+            type: integer
+          in: query
+          name: page
+        - schema:
+            type: integer
+          in: query
+          name: size
+        - schema:
+            type: string
+          in: query
+          name: sort
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CourseDto'
+      x-stoplight:
+        id: 3kapfzs95y721
+  /api/teacher:
+    get:
+      tags:
+        - teacher-controller
+      operationId: findAll
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TeacherDto'
+      x-stoplight:
+        id: 82bwjxxstlct7
+  '/api/teacher/{id}':
+    get:
+      tags:
+        - teacher-controller
+      operationId: findById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeacherDto'
+      x-stoplight:
+        id: s5f4htmrul7cm
+  /api/student:
+    get:
+      tags:
+        - student-controller
+      operationId: findAll_1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudentDto'
+      x-stoplight:
+        id: xdpj498mouu0w
+  '/api/student/{id}':
+    get:
+      tags:
+        - student-controller
+      operationId: findById_1
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentDto'
+      x-stoplight:
+        id: mdouarn56klxu
+  /api/course:
+    get:
+      tags:
+        - course-controller
+      operationId: findAll_2
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CourseDto'
+      x-stoplight:
+        id: 26mqwbgnvhk6w
+  '/api/course/{id}':
+    get:
+      tags:
+        - course-controller
+      operationId: findById_2
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseDto'
+      x-stoplight:
+        id: bd7ap67a60lxx
+  '/api/course/{id}/history':
+    get:
+      tags:
+        - course-controller
+      operationId: getHistoryById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HistoryDataCourseDto'
+      x-stoplight:
+        id: 534y4bcf6jbg9
+  '/api/course/{courseId}/revision/{revision}':
+    get:
+      tags:
+        - course-controller
+      operationId: getRevisionOfHistory
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: revision
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseDto'
+      x-stoplight:
+        id: s8u31ig08obyv
+  '/api/student/picture/{studentId}':
+    get:
+      summary: ''
+      tags:
+        - student-controller
+      responses:
+        '200':
+          description: OK
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+                properties: {}
+      operationId: getPicture
+      x-stoplight:
+        id: u3g5k514dq0fu
+    parameters:
+      - schema:
+          type: integer
+          format: int64
+        name: studentId
+        in: path
+        required: true
+    delete:
+      summary: ''
+      tags:
+        - student-controller
+      responses:
+        '200':
+          description: OK
+      operationId: deletePicture
+      x-stoplight:
+        id: i2spbcl581ea7
+    post:
+      summary: ''
+      tags:
+        - student-controller
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+      operationId: uploadPicture
+      x-stoplight:
+        id: xzq8nso5i75v6
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  format: binary
+                  x-stoplight:
+                    id: gdxwjkt5zfgki
+components:
+  schemas:
+    CourseDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        students:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/StudentDto'
+        teachers:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/TeacherDto'
+      x-stoplight:
+        id: 8e2cvorktjvt4
+    StudentDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        birthDate:
+          type: string
+          format: date
+        semester:
+          type: integer
+          format: int32
+        coursesToLearn:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/CourseDto'
+        centralIdentification:
+          type: integer
+          format: int32
+        usedFreeSemesters:
+          type: integer
+          format: int32
+      x-stoplight:
+        id: n1h51e7bxx0hl
+    TeacherDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        birthdate:
+          type: string
+          format: date
+        coursesToTeach:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/CourseDto'
+      x-stoplight:
+        id: 77qvs0zq0dnoe
+    HistoryDataCourseDto:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CourseDto'
+        revisionType:
+          type: string
+          enum:
+            - ADD
+            - MOD
+            - DEL
+        revision:
+          type: integer
+          format: int32
+        date:
+          type: string
+          format: date-time
+      x-stoplight:
+        id: aj6veol19vwt5
