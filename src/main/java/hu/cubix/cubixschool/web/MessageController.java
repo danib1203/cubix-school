@@ -1,6 +1,5 @@
 package hu.cubix.cubixschool.web;
 
-import hu.cubix.cubixschool.service.MessageService;
 import hu.cubix.cubixschool.ws.CourseMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MessageController {
 
-    private final MessageService messageService;
     private final SimpMessagingTemplate messagingTemplate;
 
     @RequestMapping("/api/message/{courseId}")

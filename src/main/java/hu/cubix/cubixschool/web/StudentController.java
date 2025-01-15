@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -25,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StudentController implements StudentControllerApi {
 
-    private final NativeWebRequest nativeWebRequest;
+
     private final StudentRepository studentRepository;
     private final StudentMapper studentMapper;
 
