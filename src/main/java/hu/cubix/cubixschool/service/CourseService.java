@@ -8,6 +8,7 @@ import hu.cubix.cubixschool.repository.CourseRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.DefaultRevisionEntity;
 import org.hibernate.envers.RevisionType;
@@ -20,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -64,7 +67,7 @@ public class CourseService {
             List<Course> courses = Lists.newArrayList(courseRepository.findAll(ExpressionUtils.allOf(predicates), pageable));
             List<Integer> courseIds = courses.stream().map(Course::getId).toList();
             courses = courseRepository.findByIdWithStudents(courseIds);
-            courses = courseRepository.findByIdAllWithTeachers(courseIds);
+            courses = courseRepository.findByIdAllWithTeachers(courseIds, pageable.getSort());
 
             return courses;
         }
@@ -103,12 +106,32 @@ public class CourseService {
     }
 
     @Transactional
-    public Course getCourseAtGivenRevision(int courseId, int revision) {
-        Course course = AuditReaderFactory.get(em).find(Course.class, courseId, revision);
-        course.getName().toString();
-        course.getTeachers().size();
-        course.getStudents().size();
-        return course;
+    @SuppressWarnings(value = "unchecked")
+    public Course getCourseAtGivenRevision(int courseId, LocalDate localDate) {
+        ZoneId zoneId = ZoneId.systemDefault();
+
+        long startOfDay = localDate.atStartOfDay(zoneId).toInstant().toEpochMilli();
+        long endOfDay = localDate.atTime(23, 59, 59, 999_999_999).atZone(zoneId).toInstant().toEpochMilli();
+
+        AuditReader auditReader = AuditReaderFactory.get(em);
+        List<Object[]> results = auditReader.createQuery()
+                .forRevisionsOfEntity(Course.class, false, true)
+                .add(AuditEntity.id().eq(courseId))
+                .add(AuditEntity.revisionProperty("timestamp").ge(startOfDay))
+                .add(AuditEntity.revisionProperty("timestamp").le(endOfDay))
+                .addOrder(AuditEntity.revisionNumber().desc())
+                .setMaxResults(1)
+                .getResultList();
+
+        try {
+            Course course = (Course) results.get(0)[0];
+            course.getName().toString();
+            course.getTeachers().size();
+            course.getStudents().size();
+            return course;
+        } catch (IndexOutOfBoundsException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     @Transactional

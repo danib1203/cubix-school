@@ -14,7 +14,7 @@ public class SemesterService {
     private final StudentRepository studentRepository;
     Random random = new Random();
 
-    @Retry
+    @Retry(delayInMillisecond = 500, maxAttempts = 5)
     public int usedFreeSemesters(int centralIdentification) {
         System.out.println("usedFreeSemesters called");
         if (random.nextBoolean()){

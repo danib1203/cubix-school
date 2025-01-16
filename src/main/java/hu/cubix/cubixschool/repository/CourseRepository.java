@@ -1,6 +1,7 @@
 package hu.cubix.cubixschool.repository;
 
 import hu.cubix.cubixschool.model.Course;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -28,5 +29,5 @@ public interface CourseRepository extends JpaRepository<Course, Integer>,
 
     @EntityGraph(attributePaths = {"teachers"})
     @Query("SELECT a FROM Course a where a.id in :courseIds")
-    List<Course> findByIdAllWithTeachers(List<Integer> courseIds);
+    List<Course> findByIdAllWithTeachers(List<Integer> courseIds, Sort sort);
 }

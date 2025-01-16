@@ -194,7 +194,7 @@ paths:
                   $ref: '#/components/schemas/HistoryDataCourseDto'
       x-stoplight:
         id: 534y4bcf6jbg9
-  '/api/course/{courseId}/revision/{revision}':
+  '/api/course/{courseId}/revision/{date}':
     get:
       tags:
         - course-controller
@@ -206,12 +206,12 @@ paths:
           schema:
             type: integer
             format: int32
-        - name: revision
+        - name: date
           in: path
           required: true
           schema:
-            type: integer
-            format: int32
+            type: string
+            format: date
       responses:
         '200':
           description: OK
@@ -275,6 +275,10 @@ paths:
             schema:
               type: object
               properties:
+                fileName:
+                  type: string
+                  x-stoplight:
+                    id: 4t5h8bmzehb5v
                 content:
                   type: string
                   format: binary

@@ -10,9 +10,7 @@ import hu.webuni.cubixschool.api.model.CourseDto;
 import hu.webuni.cubixschool.api.model.HistoryDataCourseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
@@ -24,6 +22,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.Method;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +36,7 @@ public class CourseController implements CourseControllerApi {
     private final CourseMapper courseMapper;
     private final HistoryDataMapper historyDataMapper;
     private final PageableHandlerMethodArgumentResolver pageableResolver;
+
 
     @Override
     public Optional<NativeWebRequest> getRequest() {
@@ -66,24 +66,11 @@ public class CourseController implements CourseControllerApi {
     }
 
     @Override
-    public ResponseEntity<CourseDto> getRevisionOfHistory(Integer courseId, Integer revision) {
-        Course courseHistory = courseService.getCourseAtGivenRevision(courseId, revision);
-
+    public ResponseEntity<CourseDto> getRevisionOfHistory(Integer courseId, LocalDate date) {
+        Course courseHistory = courseService.getCourseAtGivenRevision(courseId, date);
         return ResponseEntity.ok(courseMapper.entityToDto(courseHistory));
     }
 
-//  @Override
-//  public ResponseEntity<List<CourseDto>> search(Integer semesterFrom, Integer semesterTo, Boolean full, Integer page, Integer size, String sort, CourseDto courseDto) {
-//      boolean isFull = full == null ? false : full;
-
-//      Pageable pageable = createPageable("configPageable");
-
-//      List<Course> courses = courseService.findCoursesByExample(courseMapper.dtoToEntity(courseDto), Optional.ofNullable(semesterFrom), Optional.ofNullable(semesterTo), pageable);
-
-//      return ResponseEntity.ok(isFull
-//              ? courseMapper.entitiesToDtos(courses)
-//              : courseMapper.entitySummariesToDtos(courses));
-//  }
 
     @Override
     public ResponseEntity<List<CourseDto>> search(CourseDto courseDto, Integer semesterFrom, Integer semesterTo, Boolean full, Integer page, Integer size, String sort) {

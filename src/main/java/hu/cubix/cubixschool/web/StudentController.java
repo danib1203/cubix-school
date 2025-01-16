@@ -72,7 +72,7 @@ public class StudentController implements StudentControllerApi {
     }
 
     @Override
-    public ResponseEntity<String> uploadPicture(Long studentId, MultipartFile content) {
+    public ResponseEntity<String> uploadPicture(Long studentId, String fileName, MultipartFile content) {
         try {
             Path filepath = Paths.get("uploads", studentId + " student ID" + ".jpg");
             Files.write(filepath, content.getBytes());
@@ -81,4 +81,5 @@ public class StudentController implements StudentControllerApi {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("File upload failed.");
         }
     }
+
 }

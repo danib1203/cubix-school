@@ -15,12 +15,12 @@ public class RetryAspect {
     private final SchoolConfigProperties schoolConfigProperties;
 
 
-    @Around("@annotation(hu.cubix.cubixschool.aspect.Retry)")
-    public Object retryLogic(ProceedingJoinPoint joinPoint) throws Throwable {
+    @Around("@annotation(hu.cubix.cubixschool.aspect.Retry) && args(maxAttempts,delayInMillisecond)")
+    public Object retryLogic(ProceedingJoinPoint joinPoint, int maxAttempts, int delayInMillisecond) throws Throwable {
 
         int attempt = 0;
-        int maxAttempts = schoolConfigProperties.getRetry().getMaxAttempts();
-        int delayInMillisecond = (int) schoolConfigProperties.getRetry().getDelayMs();
+       // int maxAttempts = schoolConfigProperties.getRetry().getMaxAttempts();
+       // int delayInMillisecond = (int) schoolConfigProperties.getRetry().getDelayMs();
 
         while (attempt < maxAttempts) {
 

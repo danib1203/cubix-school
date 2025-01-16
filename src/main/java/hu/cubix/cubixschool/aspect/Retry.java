@@ -8,4 +8,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Retry {
+    public int maxAttempts() default 0;
+    public int delayInMillisecond() default 0;
+
 }
